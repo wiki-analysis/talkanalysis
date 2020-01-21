@@ -170,7 +170,7 @@ def parsef(file):
                                 print('ing')
                                 ch=beremoved(ttext)
 
-                            if 'removed' in ttext:
+                            elif 'removed' in ttext:
                                 print('ed')
                                 flag=2
 
