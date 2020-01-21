@@ -44,16 +44,11 @@ def rewrite(ttext):
 
 def POV(ttext):
         ch=[]
-
-
         if ('"' in ttext):
-            #print('here')
             c=re.findall(r'"(.*?)"',ttext)
             for ja in c:
                 ch.append(ja)
-            #print('" usinf this ', ch)
-
-
+         
         if ('-' in ttext):
             ttext = re.split('[-]', ttext)
             if 'POV' in ttext[0]:
@@ -61,18 +56,17 @@ def POV(ttext):
             else:
                 c =ttext[0]
             ch.append(c)
-        print('\nPOV ch\n\n', ch)
+        
         return ch
 def point (ttext):
     ch=[]
     lttext=ttext.lower()
     flag2=1
-    #print('falg is :',flag2)
     if(flag2==1):
         if('removed' in lttext):
-            #print("found remoed in ss")
+            
             ch=re.findall(r'"(.*?)"',ttext)
-            #print('\nremoved ch: \n',ch)
+            
     return ch
 def beremoved(ttext):
     c = []
@@ -104,10 +98,8 @@ def parsef(file):
               print(count)
               f.write('\n')
               f.write(str(count))
-
               f.write('\n')
               for y in x:
-                 # if count<=100:
                     if y.tag == "{http://www.mediawiki.org/xml/export-0.10/}contributor":
                         for name in y:
                             if name.tag=='{http://www.mediawiki.org/xml/export-0.10/}username':
@@ -117,13 +109,10 @@ def parsef(file):
                     if y.tag=="{http://www.mediawiki.org/xml/export-0.10/}timestamp":
                         tts=y.text
                         dateutil.parser.parse(tts)
-
                     if y.tag=="{http://www.mediawiki.org/xml/export-0.10/}text":
-
                         if(count==1):
                             ttext=y.text
                             ttext1=y.text
-
                         else:
                             ttext=y.text
                             if(ttext!=None):
@@ -134,44 +123,30 @@ def parsef(file):
                                         s = s.replace(nline, ' ')
                                     elif nline in s:
                                         s = s.replace(nline, '')
-
                             ttext = s
                             ttext1 = ttext1 + ttext
                             ttext = ttext.replace('\n\n\n', '')
-
                         f.write(ttext)
                         f.write('\n\n')
-
-                        #print(ttext)
                         flag=0
                         if 'POV' in ttext:
                             ch=POV(ttext)
                             for i in ch:
                                  print(i)
-                        if 'vandal' in ttext:
-                            print('vandalism')
+                        if 'vandal' in ttext:                           
                             v=vandalism.vandal(0,0,tts)
                             if v==1:
-                                flag=2
-                                print('yes')
+                                flag=2                                
                         if 'point of view' in ttext:
-                            print('here2')
-                            ch=point(ttext)
-                        if count==1:
-                            print(ttext)
+                            ch=point(ttext
                         elif 'remov' in ttext:
-                            if ' be removed ' in ttext:
-                                print('br')
+                            if ' be removed ' in ttext:                               
                                 ch=beremoved(ttext)
-                            if ' remove ' in ttext:
-                                print('remove')
+                            if ' remove ' in ttext:                              
                                 ch=beremoved(ttext)
-                            if ' removing ' in ttext:
-                                print('ing')
+                            if ' removing ' in ttext:                              
                                 ch=beremoved(ttext)
-
-                            elif 'removed' in ttext:
-                                print('ed')
+                            elif 'removed' in ttext:                               
                                 flag=2
 
                         elif 'delete' in ttext:
@@ -207,7 +182,7 @@ def mpage(ch,tts,flag,count):
     muname=''
     muid=''
     if flag==0:
-      nmtree=ET.parse("Book.xml")
+      nmtree=ET.parse("nm.xml")
       myroot=nmtree.getroot()
       for x1 in myroot.findall("{http://www.mediawiki.org/xml/export-0.10/}page/{http://www.mediawiki.org/xml/export-0.10/}revision"):
          if flag==0:
@@ -220,17 +195,13 @@ def mpage(ch,tts,flag,count):
                                 muid = name.text
 
                     if z.tag=="{http://www.mediawiki.org/xml/export-0.10/}text":
-                        nmtext=z.text
-                        ##print(type(nmtext))
+                        nmtext=z.text                    
                     if z.tag=="{http://www.mediawiki.org/xml/export-0.10/}timestamp":
                         nmts=z.text
                         dateutil.parser.parse(nmts)
-                        ##print(ch)
                         if nmts>tts:
                           if nmtext==None:
-                                continue
-                           ##print(count,ch,'  ',type(ch))
-                            ##print('this is timestamp: ',nmts)
+                                continue                           
                           for e in ch:
                             if (e not in nmtext):
                                 check=1
@@ -273,7 +244,7 @@ def mpage(ch,tts,flag,count):
     return aa
 
 
-p=parsef('Book_talk.xml')
+p=parsef('nm_talk.xml')
 print('ta finaly is',p)
 f.close()
 g.close()
